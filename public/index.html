@@ -1,78 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Top Cryptocurrencies</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    .nav-toggle { display: none; }
-
-    nav {
-      background: rgba(0,0,0,0.4);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      margin: 4px 0;
-    }
-
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        background-color: rgba(0, 0, 0, 0.9);
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        text-align: center;
-      }
-
-      .nav-links.active {
-        display: flex;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-    }
-</style>
 </head>
+
 <body>
-  
+
   <nav class="navbar">
     <div class="nav-brand">
       <h2>CryptoNav</h2>
     </div>
-  
+
     <div class="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu">
-      <div></div><div></div><div></div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
-  
+
     <div class="nav-links" id="nav-links">
       <a href="index.html">🏠 Home</a>
       <a href="charts.html">📊 Charts</a>
@@ -80,7 +28,7 @@
       <a href="coin.html?id=1">🔍 Details</a>
     </div>
   </nav>
-  
+
 
   <header>
     <h1 style="text-align:center">🌐 Top Cryptocurrencies</h1>
@@ -88,7 +36,7 @@
   <div id="crypto-container" style="padding: 2rem;"></div>
   <footer style="text-align:center; padding: 1rem;">Powered by CoinMarketCap</footer>
   <script src="script.js"></script>
-  
+
   <script>
     function toggleMenu() {
       document.getElementById('nav-links').classList.toggle('active');
@@ -96,4 +44,5 @@
   </script>
 
 </body>
+
 </html>

@@ -1,152 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Crypto Details</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .nav-toggle { display: none; }
+    <meta charset="UTF-8">
+    <title>Crypto Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
 
-    nav {
-      background: rgba(0,0,0,0.4);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-    }
-
-    .hamburger div {
-      width: 25px;
-      height: 3px;
-      background-color: white;
-      margin: 4px 0;
-    }
-
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        background-color: rgba(0, 0, 0, 0.9);
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        text-align: center;
-      }
-
-      .nav-links.active {
-        display: flex;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-    }
-
-    #search-section {
-      text-align: center;
-      margin-top: 1rem;
-    }
-
-    #search-section input {
-      padding: 0.5rem;
-      width: 60%;
-      max-width: 300px;
-      font-size: 1rem;
-      border-radius: 4px;
-      border: none;
-    }
-  </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="nav-brand">
-          <h2>CryptoNav</h2>
+            <h2>CryptoNav</h2>
         </div>
-      
+
         <div class="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu">
-          <div></div><div></div><div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
-      
+
         <div class="nav-links" id="nav-links">
-          <a href="index.html">🏠 Home</a>
-          <a href="charts.html">📊 Charts</a>
-          <a href="history.html">📜 History</a>
-          <a href="coin.html?id=1">🔍 Details</a>
+            <a href="index.html">🏠 Home</a>
+            <a href="charts.html">📊 Charts</a>
+            <a href="history.html">📜 History</a>
+            <a href="coin.html?id=1">🔍 Details</a>
         </div>
-      </nav>
-      
+    </nav>
 
-  <header><h1 style="text-align:center">💡 Cryptocurrency Details</h1></header>
 
-  <section id="search-section">
-    <input type="text" id="search" placeholder="Search by name or symbol..." oninput="searchCrypto()">
-    <div id="search-results" style="margin-top: 1rem;"></div>
-  </section>
+    <header>
+        <h1 style="text-align:center">💡 Cryptocurrency Details</h1>
+    </header>
 
-  <div id="coin-detail" style="padding: 2rem;"></div>
+    <section id="search-section">
+        <input type="text" id="search" placeholder="Search by name or symbol..." oninput="searchCrypto()">
+        <div id="search-results" style="margin-top: 1rem;"></div>
+    </section>
 
-  <footer style="text-align:center; padding: 1rem;">Powered by CoinMarketCap</footer>
+    <div id="coin-detail" style="padding: 2rem;"></div>
 
-  <script>
-    function toggleMenu() {
-      document.getElementById('nav-links').classList.toggle('active');
-    }
+    <footer style="text-align:center; padding: 1rem;">Powered by CoinMarketCap</footer>
 
-    const searchInput = document.getElementById("search");
-    const searchResults = document.getElementById("search-results");
+    <script>
+        function toggleMenu() {
+            document.getElementById('nav-links').classList.toggle('active');
+        }
 
-    async function searchCrypto() {
-      const query = searchInput.value.toLowerCase();
-      if (query.length < 2) {
-        searchResults.innerHTML = "";
-        return;
-      }
+        const searchInput = document.getElementById("search");
+        const searchResults = document.getElementById("search-results");
 
-      const res = await fetch("/.netlify/functions/getCryptoList");
-      const data = await res.json();
-      const results = data.data.filter(coin =>
-        coin.name.toLowerCase().includes(query) || coin.symbol.toLowerCase().includes(query)
-      );
+        async function searchCrypto() {
+            const query = searchInput.value.toLowerCase();
+            if (query.length < 2) {
+                searchResults.innerHTML = "";
+                return;
+            }
 
-      searchResults.innerHTML = results.map(function(c) {
-        return `<p><a href="coin.html?id=${c.id}" style="color:#00e5ff;">${c.name} (${c.symbol})</a></p>`;
-      }).join("");
-    }
+            const res = await fetch("/.netlify/functions/getCryptoList");
+            const data = await res.json();
+            const results = data.data.filter(coin =>
+                coin.name.toLowerCase().includes(query) || coin.symbol.toLowerCase().includes(query)
+            );
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const coinId = urlParams.get("id");
+            searchResults.innerHTML = results.map(function (c) {
+                return `<p><a href="coin.html?id=${c.id}" style="color:#00e5ff;">${c.name} (${c.symbol})</a></p>`;
+            }).join("");
+        }
 
-    if (coinId) {
-      fetch(`/.netlify/functions/getCoinDetails?id=${coinId}`)
-        .then(res => res.json())
-        .then(data => {
-          if (!data || !data.data || !data.data[coinId]) {
-            throw new Error("Invalid coin data received");
-          }
+        const urlParams = new URLSearchParams(window.location.search);
+        const coinId = urlParams.get("id");
 
-          const coin = data.data[coinId];
-          const container = document.getElementById("coin-detail");
+        if (coinId) {
+            fetch(`/.netlify/functions/getCoinDetails?id=${coinId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data || !data.data || !data.data[coinId]) {
+                        throw new Error("Invalid coin data received");
+                    }
 
-          container.innerHTML = `
+                    const coin = data.data[coinId];
+                    const container = document.getElementById("coin-detail");
+
+                    container.innerHTML = `
             <div style="text-align: center;">
               <img src="${coin.logo}" alt="${coin.name}" style="width: 64px; margin-bottom: 1rem;">
               <h2>${coin.name} (${coin.symbol})</h2>
@@ -161,12 +98,13 @@
               <p style="line-height: 1.5;">${coin.description || "No description available."}</p>
             </div>
           `;
-        })
-        .catch(err => {
-          console.error("Error loading details", err);
-          document.getElementById("coin-detail").innerText = "Failed to load coin data.";
-        });
-    }
-  </script>
+                })
+                .catch(err => {
+                    console.error("Error loading details", err);
+                    document.getElementById("coin-detail").innerText = "Failed to load coin data.";
+                });
+        }
+    </script>
 </body>
+
 </html>
