@@ -8,13 +8,16 @@ fetch('/.netlify/functions/getCrypto')
     }
 
     const container = document.getElementById('crypto-container');
-    data.data.slice(0,25).forEach(coin => {
+    data.data.slice(0, 25).forEach(coin => {
       const logoUrl = `https://s2.coinmarketcap.com/static/img/coins/64x64/${coin.id}.png`;
-
       const div = document.createElement('div');
       div.className = 'crypto';
       div.innerHTML = `
-        <img src="${logoUrl}" alt="${coin.name} logo" style="width: 48px; height: 48px; border-radius: 50%; margin-bottom: 10px;">
+  <a href="coin.html?id=${coin.id}" style="text-decoration: none; color: inherit;">
+    <img src="${logoUrl}" alt="${coin.name} logo" style="width: 48px; height: 48px; border-radius: 50%;">
+    <h2>${coin.name} (${coin.symbol})</h2>
+    <p><strong>Price:</strong> $${coin.quote.USD.price.toFixed(2)}</p>
+  </a>
         <h2>${coin.name} (${coin.symbol})</h2>
         <p><strong>Rank:</strong> ${coin.cmc_rank}</p>
         <p><strong>Price:</strong> $${coin.quote.USD.price.toFixed(2)}</p>
