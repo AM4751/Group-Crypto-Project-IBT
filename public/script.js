@@ -1,6 +1,12 @@
 fetch('/.netlify/functions/getCrypto')
   .then(res => res.json())
   .then(data => {
+    if (!data || !data.data) {
+      console.error('API returned unexpected response:', data);
+      document.getElementById('crypto-container').innerText = "Error: Failed to load crypto data.";
+      return;
+    }
+
     const container = document.getElementById('crypto-container');
     data.data.forEach(coin => {
       const div = document.createElement('div');
@@ -15,4 +21,5 @@ fetch('/.netlify/functions/getCrypto')
   })
   .catch(error => {
     console.error('Error fetching data:', error);
+    document.getElementById('crypto-container').innerText = "Error: Unable to load data.";
   });
