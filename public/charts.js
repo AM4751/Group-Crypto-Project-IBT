@@ -83,12 +83,13 @@ fetch('/.netlify/functions/getCryptoList')
             x: {
               ticks: {
                 color: '#fff',
-                maxRotation: 0,
-                minRotation: 0,
-                autoSkip: false
+                autoSkip: true,
+                maxRotation: 30,
+                minRotation: 0
               },
               grid: { color: 'rgba(255,255,255,0.1)' }
             }
+
           }
         }
       });
@@ -124,6 +125,13 @@ fetch('/.netlify/functions/getCryptoList')
               callbacks: {
                 label: ctx => ctx.raw.toLocaleString(undefined, { maximumFractionDigits: 2 })
               }
+            }
+          },
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              top: 10,
+              bottom: 20
             }
           },
           scales: {
