@@ -14,12 +14,12 @@ fetch('/.netlify/functions/getCryptoList')
 
       const canvas1 = document.createElement('canvas');
       canvas1.id = `financial-${index}`;
-      canvas1.style.maxHeight = '200px';
+      canvas1.style.height = '280px';
       canvas1.style.marginBottom = '1.5rem';
 
       const canvas2 = document.createElement('canvas');
       canvas2.id = `supply-${index}`;
-      canvas2.style.maxHeight = '200px';
+      canvas2.style.height = '250px';
       canvas2.style.marginTop = '0.5rem';
 
       card.appendChild(title);
@@ -31,7 +31,7 @@ fetch('/.netlify/functions/getCryptoList')
       new Chart(financialCtx, {
         type: 'bar',
         data: {
-          labels: ['P($)', 'MKT CP($)', 'V-24h-($)'],
+          labels: ['Price', 'Mkt Cap', 'Vol 24h'],
           datasets: [{
             data: [
               coin.quote.USD.price,
@@ -48,6 +48,13 @@ fetch('/.netlify/functions/getCryptoList')
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              top: 10,
+              bottom: 20
+            }
+          },
           plugins: {
             legend: { display: false },
             title: {
@@ -72,6 +79,7 @@ fetch('/.netlify/functions/getCryptoList')
               beginAtZero: true,
               ticks: {
                 color: '#fff',
+                font: { size: 11 },
                 callback: value => {
                   if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
                   if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
@@ -83,13 +91,13 @@ fetch('/.netlify/functions/getCryptoList')
             x: {
               ticks: {
                 color: '#fff',
-                autoSkip: true,
-                maxRotation: 30,
+                font: { size: 11 },
+                autoSkip: false,
+                maxRotation: 0,
                 minRotation: 0
               },
               grid: { color: 'rgba(255,255,255,0.1)' }
             }
-
           }
         }
       });
@@ -98,7 +106,7 @@ fetch('/.netlify/functions/getCryptoList')
       new Chart(supplyCtx, {
         type: 'bar',
         data: {
-          labels: ['Circulating Supply', 'Total Supply'],
+          labels: ['Circ. Supply', 'Total Supply'],
           datasets: [{
             data: [
               coin.circulating_supply,
@@ -113,6 +121,13 @@ fetch('/.netlify/functions/getCryptoList')
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              top: 10,
+              bottom: 20
+            }
+          },
           plugins: {
             legend: { display: false },
             title: {
@@ -127,25 +142,22 @@ fetch('/.netlify/functions/getCryptoList')
               }
             }
           },
-          maintainAspectRatio: false,
-          layout: {
-            padding: {
-              top: 10,
-              bottom: 20
-            }
-          },
           scales: {
             y: {
               beginAtZero: true,
-              ticks: { color: '#fff' },
+              ticks: {
+                color: '#fff',
+                font: { size: 11 }
+              },
               grid: { color: 'rgba(255,255,255,0.1)' }
             },
             x: {
               ticks: {
                 color: '#fff',
+                font: { size: 11 },
+                autoSkip: false,
                 maxRotation: 0,
-                minRotation: 0,
-                autoSkip: false
+                minRotation: 0
               },
               grid: { color: 'rgba(255,255,255,0.1)' }
             }
