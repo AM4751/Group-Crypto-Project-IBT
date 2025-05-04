@@ -5,27 +5,25 @@ fetch('/.netlify/functions/getCryptoList')
     const container = document.getElementById('chart-container');
 
     top20.forEach((coin, index) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'crypto-card';
-      wrapper.style.padding = '1rem';
-      wrapper.style.borderRadius = '12px';
-      wrapper.style.background = 'rgba(255, 255, 255, 0.05)';
-      wrapper.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
-      wrapper.style.marginBottom = '2rem';
+      // Create a card element styled like the homepage
+      const card = document.createElement('div');
+      card.className = 'crypto-card';
 
+      // Title
       const title = document.createElement('h3');
-      title.style.textAlign = 'center';
-      title.style.color = '#ffffff';
       title.innerText = `${coin.name} (${coin.symbol})`;
 
+      // Canvas for chart
       const canvas = document.createElement('canvas');
       canvas.id = `chart-${index}`;
-      canvas.height = 300;
+      canvas.style.maxHeight = '220px';
 
-      wrapper.appendChild(title);
-      wrapper.appendChild(canvas);
-      container.appendChild(wrapper);
+      // Append elements
+      card.appendChild(title);
+      card.appendChild(canvas);
+      container.appendChild(card);
 
+      // Render chart
       const ctx = canvas.getContext('2d');
       new Chart(ctx, {
         type: 'bar',
