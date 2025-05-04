@@ -2,7 +2,11 @@
 fetch('/.netlify/functions/getCryptoList')
   .then(res => res.json())
   .then(data => {
+    if (!data || !data.data) {
+      throw new Error("No data returned from API");
+    }
     const top20 = data.data.slice(0, 20);
+
     const container = document.getElementById('chart-container');
 
     top20.forEach((coin, index) => {
