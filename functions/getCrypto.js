@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
 exports.handler = async function(event, context) {
-  const url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=5';
+  const url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=100';
 
   try {
     const response = await fetch(url, {
