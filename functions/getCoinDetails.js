@@ -7,7 +7,7 @@ exports.handler = async function(event) {
   try {
     const response = await fetch(url, {
       headers: {
-        'X-CMC_PRO_API_KEY': 'YOUR_API_KEY',
+        'X-CMC_PRO_API_KEY': '39a3b9e0-0a5c-42dd-9f33-73ede8f32550',
         'Accept': 'application/json'
       }
     });

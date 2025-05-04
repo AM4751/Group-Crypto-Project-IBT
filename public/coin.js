@@ -4,6 +4,10 @@ const coinId = urlParams.get("id");
 fetch(`/.netlify/functions/getCoinDetails?id=${coinId}`)
   .then(res => res.json())
   .then(data => {
+    if (!data || !data.data || !data.data[coinId]) {
+      throw new Error("Invalid coin data received");
+    }
+
     const coin = data.data[coinId];
     const container = document.getElementById("coin-detail");
 
