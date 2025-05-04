@@ -3,10 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <title>Crypto History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .nav-toggle { display: none; }
+
+    nav {
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .hamburger div {
+      width: 25px;
+      height: 3px;
+      background-color: white;
+      margin: 4px 0;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background-color: rgba(0, 0, 0, 0.9);
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header><h1>📜 Cryptocurrency History</h1></header>
+
+  <nav>
+    <h2 style="color: white; margin: 0;">CryptoNav</h2>
+    <div class="hamburger" onclick="toggleMenu()">
+      <div></div><div></div><div></div>
+    </div>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html">Home</a>
+      <a href="charts.html">Charts</a>
+      <a href="history.html">History</a>
+      <a href="coin.html?id=1">Details</a>
+    </div>
+  </nav>
+
+  <header><h1 style="text-align:center">📜 Cryptocurrency History</h1></header>
+
   <main style="padding: 2rem; max-width: 800px; margin: auto; line-height: 1.6;">
     <h2>What is Cryptocurrency?</h2>
     <p>Cryptocurrency is a form of digital currency that uses cryptography for secure financial transactions. It is decentralized and typically operates on a blockchain platform.</p>
@@ -24,6 +96,14 @@
     <h2>Why It Matters</h2>
     <p>Cryptocurrencies represent a shift in how we store, transfer, and understand value. They enable decentralized finance (DeFi), digital ownership (NFTs), and global borderless transactions.</p>
   </main>
-  <footer>Crypto History | Educational Page</footer>
+
+  <footer style="text-align:center; padding: 1rem;">Crypto History | Educational Page</footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('nav-links').classList.toggle('active');
+    }
+  </script>
+
 </body>
 </html>
