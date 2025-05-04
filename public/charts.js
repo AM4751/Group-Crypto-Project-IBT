@@ -5,15 +5,24 @@ fetch('/.netlify/functions/getCryptoList')
     const container = document.getElementById('chart-container');
 
     top20.forEach((coin, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'crypto-card';
+      wrapper.style.padding = '1rem';
+      wrapper.style.borderRadius = '12px';
+      wrapper.style.background = 'rgba(255, 255, 255, 0.05)';
+      wrapper.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
+      wrapper.style.marginBottom = '2rem';
+
+      const title = document.createElement('h3');
+      title.style.textAlign = 'center';
+      title.style.color = '#ffffff';
+      title.innerText = `${coin.name} (${coin.symbol})`;
+
       const canvas = document.createElement('canvas');
       canvas.id = `chart-${index}`;
-      canvas.style.marginBottom = '50px';
-      canvas.style.background = '#1e1e1e';
-      canvas.style.borderRadius = '10px';
+      canvas.height = 300;
 
-      const wrapper = document.createElement('div');
-      wrapper.style.marginBottom = '40px';
-      wrapper.innerHTML = `<h3 style="text-align:center;color:white;">${coin.name} (${coin.symbol})</h3>`;
+      wrapper.appendChild(title);
       wrapper.appendChild(canvas);
       container.appendChild(wrapper);
 
@@ -60,5 +69,6 @@ fetch('/.netlify/functions/getCryptoList')
   })
   .catch(err => {
     console.error("Chart loading error", err);
-    document.getElementById('chart-container').innerHTML = "<p style='color:red;text-align:center;'>Failed to load charts.</p>";
+    document.getElementById('chart-container').innerHTML =
+      "<p style='color:red;text-align:center;'>Failed to load charts.</p>";
   });
