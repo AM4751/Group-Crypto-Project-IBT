@@ -64,18 +64,23 @@
 </head>
 <body>
   
-  <nav>
-    <h2 style="color: white; margin: 0;">CryptoNav</h2>
-    <div class="hamburger" onclick="toggleMenu()">
+  <nav class="navbar">
+    <div class="nav-brand">
+      <h2>CryptoNav</h2>
+    </div>
+  
+    <div class="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu">
       <div></div><div></div><div></div>
     </div>
+  
     <div class="nav-links" id="nav-links">
-      <a href="index.html">Home</a>
-      <a href="charts.html">Charts</a>
-      <a href="history.html">History</a>
-      <a href="coin.html?id=1">Details</a>
+      <a href="index.html">🏠 Home</a>
+      <a href="charts.html">📊 Charts</a>
+      <a href="history.html">📜 History</a>
+      <a href="coin.html?id=1">🔍 Details</a>
     </div>
   </nav>
+  
 
   <header>
     <h1 style="text-align:center">🌐 Top 5 Cryptocurrencies</h1>
