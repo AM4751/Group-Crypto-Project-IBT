@@ -2,11 +2,8 @@
 fetch('/.netlify/functions/getCryptoList')
   .then(res => res.json())
   .then(data => {
-    if (!data || !data.data) {
-      throw new Error("No data returned from API");
-    }
+    if (!data || !data.data) throw new Error("Invalid API response");
     const top20 = data.data.slice(0, 20);
-
     const container = document.getElementById('chart-container');
 
     top20.forEach((coin, index) => {
@@ -18,18 +15,21 @@ fetch('/.netlify/functions/getCryptoList')
 
       const canvas1 = document.createElement('canvas');
       canvas1.id = `financial-${index}`;
-      canvas1.style.height = '280px';
+      canvas1.style.height = '250px';
       canvas1.style.marginBottom = '1.5rem';
 
       const canvas2 = document.createElement('canvas');
       canvas2.id = `supply-${index}`;
-      canvas2.style.height = '250px';
+      canvas2.style.height = '220px';
       canvas2.style.marginTop = '0.5rem';
 
       card.appendChild(title);
       card.appendChild(canvas1);
       card.appendChild(canvas2);
       container.appendChild(card);
+
+      // Avoid zero values for log scale
+      const safe = val => (val > 0 ? val : 0.01);
 
       const financialCtx = canvas1.getContext('2d');
       new Chart(financialCtx, {
@@ -38,9 +38,9 @@ fetch('/.netlify/functions/getCryptoList')
           labels: ['Price', 'Mkt Cap', 'Vol 24h'],
           datasets: [{
             data: [
-              coin.quote.USD.price,
-              coin.quote.USD.market_cap,
-              coin.quote.USD.volume_24h
+              safe(coin.quote.USD.price),
+              safe(coin.quote.USD.market_cap),
+              safe(coin.quote.USD.volume_24h)
             ],
             backgroundColor: [
               'rgba(0, 255, 255, 0.6)',
@@ -54,40 +54,33 @@ fetch('/.netlify/functions/getCryptoList')
           responsive: true,
           maintainAspectRatio: false,
           layout: {
-            padding: {
-              top: 10,
-              bottom: 20
-            }
+            padding: { top: 10, bottom: 20 }
           },
           plugins: {
             legend: { display: false },
             title: {
               display: true,
-              text: 'Financial Metrics',
+              text: 'Financial Metrics (Log Scale)',
               color: '#fff',
               font: { size: 14 }
             },
             tooltip: {
               callbacks: {
-                label: ctx => {
-                  const val = ctx.raw;
-                  if (val >= 1e9) return `$${(val / 1e9).toFixed(2)}B`;
-                  if (val >= 1e6) return `$${(val / 1e6).toFixed(2)}M`;
-                  return `$${val.toFixed(2)}`;
-                }
+                label: ctx => `$${Number(ctx.raw).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
               }
             }
           },
           scales: {
             y: {
-              beginAtZero: true,
+              type: 'logarithmic',
               ticks: {
                 color: '#fff',
                 font: { size: 11 },
-                callback: value => {
-                  if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
-                  if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
-                  return `$${value}`;
+                callback: val => {
+                  if (val === 0.01) return '';
+                  if (val >= 1e9) return `$${(val / 1e9).toFixed(1)}B`;
+                  if (val >= 1e6) return `$${(val / 1e6).toFixed(1)}M`;
+                  return `$${val}`;
                 }
               },
               grid: { color: 'rgba(255,255,255,0.1)' }
@@ -113,8 +106,8 @@ fetch('/.netlify/functions/getCryptoList')
           labels: ['Circ. Supply', 'Total Supply'],
           datasets: [{
             data: [
-              coin.circulating_supply,
-              coin.total_supply || 0
+              safe(coin.circulating_supply),
+              safe(coin.total_supply || 0)
             ],
             backgroundColor: [
               'rgba(255, 206, 86, 0.6)',
@@ -127,31 +120,34 @@ fetch('/.netlify/functions/getCryptoList')
           responsive: true,
           maintainAspectRatio: false,
           layout: {
-            padding: {
-              top: 10,
-              bottom: 20
-            }
+            padding: { top: 10, bottom: 20 }
           },
           plugins: {
             legend: { display: false },
             title: {
               display: true,
-              text: 'Supply Metrics',
+              text: 'Supply Metrics (Log Scale)',
               color: '#fff',
               font: { size: 14 }
             },
             tooltip: {
               callbacks: {
-                label: ctx => ctx.raw.toLocaleString(undefined, { maximumFractionDigits: 2 })
+                label: ctx => Number(ctx.raw).toLocaleString(undefined, { maximumFractionDigits: 2 })
               }
             }
           },
           scales: {
             y: {
-              beginAtZero: true,
+              type: 'logarithmic',
               ticks: {
                 color: '#fff',
-                font: { size: 11 }
+                font: { size: 11 },
+                callback: val => {
+                  if (val === 0.01) return '';
+                  if (val >= 1e9) return `${(val / 1e9).toFixed(1)}B`;
+                  if (val >= 1e6) return `${(val / 1e6).toFixed(1)}M`;
+                  return `${val}`;
+                }
               },
               grid: { color: 'rgba(255,255,255,0.1)' }
             },
