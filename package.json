@@ -1,0 +1,10 @@
+{
+  "name": "crypto-netlify",
+  "version": "1.0.0",
+  "description": "CoinMarketCap proxy using Netlify Functions",
+  "main": "index.js",
+  "scripts": {},
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
+}
