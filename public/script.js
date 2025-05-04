@@ -17,14 +17,13 @@ fetch('/.netlify/functions/getCrypto')
     <img src="${logoUrl}" alt="${coin.name} logo" style="width: 48px; height: 48px; border-radius: 50%;">
     <h2>${coin.name} (${coin.symbol})</h2>
     <p><strong>Price:</strong> $${coin.quote.USD.price.toFixed(2)}</p>
+    <p><strong>Rank:</strong> ${coin.cmc_rank}</p>
+    <p><strong>Market Cap:</strong> $${(coin.quote.USD.market_cap / 1e9).toFixed(2)}B</p>
+    <p><strong>24h Change:</strong> ${coin.quote.USD.percent_change_24h.toFixed(2)}%</p>
+    <p><strong>Total Supply:</strong> ${coin.total_supply?.toLocaleString() ?? 'N/A'}</p>
   </a>
-        <h2>${coin.name} (${coin.symbol})</h2>
-        <p><strong>Rank:</strong> ${coin.cmc_rank}</p>
-        <p><strong>Price:</strong> $${coin.quote.USD.price.toFixed(2)}</p>
-        <p><strong>Market Cap:</strong> $${(coin.quote.USD.market_cap / 1e9).toFixed(2)}B</p>
-        <p><strong>24h Change:</strong> ${coin.quote.USD.percent_change_24h.toFixed(2)}%</p>
-        <p><strong>Total Supply:</strong> ${coin.total_supply?.toLocaleString() ?? 'N/A'}</p>
-      `;
+`;
+
       container.appendChild(div);
     });
 
