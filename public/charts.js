@@ -31,7 +31,7 @@ fetch('/.netlify/functions/getCryptoList')
       new Chart(financialCtx, {
         type: 'bar',
         data: {
-          labels: ['Price ($)', 'Market Cap ($)', 'Volume 24h ($)'],
+          labels: ['P($)', 'MKT CP($)', 'V-24h-($)'],
           datasets: [{
             data: [
               coin.quote.USD.price,
