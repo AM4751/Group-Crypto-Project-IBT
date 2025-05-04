@@ -9,22 +9,19 @@ fetch('/.netlify/functions/getCryptoList')
       const card = document.createElement('div');
       card.className = 'crypto-card';
 
-      // Title
       const title = document.createElement('h3');
       title.innerText = `${coin.name} (${coin.symbol})`;
 
-      // Canvas for financial metrics
       const canvas1 = document.createElement('canvas');
       canvas1.id = `financial-${index}`;
       canvas1.style.maxHeight = '200px';
-      canvas1.style.marginBottom = '1rem';
+      canvas1.style.marginBottom = '1.5rem';
 
-      // Canvas for supply metrics
       const canvas2 = document.createElement('canvas');
       canvas2.id = `supply-${index}`;
       canvas2.style.maxHeight = '200px';
+      canvas2.style.marginTop = '0.5rem';
 
-      // Append everything
       card.appendChild(title);
       card.appendChild(canvas1);
       card.appendChild(canvas2);
@@ -36,7 +33,6 @@ fetch('/.netlify/functions/getCryptoList')
         data: {
           labels: ['Price ($)', 'Market Cap ($)', 'Volume 24h ($)'],
           datasets: [{
-            label: 'Financial Metrics',
             data: [
               coin.quote.USD.price,
               coin.quote.USD.market_cap,
@@ -53,26 +49,44 @@ fetch('/.netlify/functions/getCryptoList')
         options: {
           responsive: true,
           plugins: {
-            legend: { labels: { color: '#fff' } },
+            legend: { display: false },
             title: {
               display: true,
               text: 'Financial Metrics',
-              color: '#fff'
+              color: '#fff',
+              font: { size: 14 }
             },
             tooltip: {
               callbacks: {
-                label: ctx => `$${ctx.raw.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+                label: ctx => {
+                  const val = ctx.raw;
+                  if (val >= 1e9) return `$${(val / 1e9).toFixed(2)}B`;
+                  if (val >= 1e6) return `$${(val / 1e6).toFixed(2)}M`;
+                  return `$${val.toFixed(2)}`;
+                }
               }
             }
           },
           scales: {
             y: {
               beginAtZero: true,
-              ticks: { color: '#fff' },
+              ticks: {
+                color: '#fff',
+                callback: value => {
+                  if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
+                  if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
+                  return `$${value}`;
+                }
+              },
               grid: { color: 'rgba(255,255,255,0.1)' }
             },
             x: {
-              ticks: { color: '#fff' },
+              ticks: {
+                color: '#fff',
+                maxRotation: 0,
+                minRotation: 0,
+                autoSkip: false
+              },
               grid: { color: 'rgba(255,255,255,0.1)' }
             }
           }
@@ -85,7 +99,6 @@ fetch('/.netlify/functions/getCryptoList')
         data: {
           labels: ['Circulating Supply', 'Total Supply'],
           datasets: [{
-            label: 'Supply Metrics',
             data: [
               coin.circulating_supply,
               coin.total_supply || 0
@@ -100,15 +113,16 @@ fetch('/.netlify/functions/getCryptoList')
         options: {
           responsive: true,
           plugins: {
-            legend: { labels: { color: '#fff' } },
+            legend: { display: false },
             title: {
               display: true,
               text: 'Supply Metrics',
-              color: '#fff'
+              color: '#fff',
+              font: { size: 14 }
             },
             tooltip: {
               callbacks: {
-                label: ctx => `${ctx.raw.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+                label: ctx => ctx.raw.toLocaleString(undefined, { maximumFractionDigits: 2 })
               }
             }
           },
@@ -119,7 +133,12 @@ fetch('/.netlify/functions/getCryptoList')
               grid: { color: 'rgba(255,255,255,0.1)' }
             },
             x: {
-              ticks: { color: '#fff' },
+              ticks: {
+                color: '#fff',
+                maxRotation: 0,
+                minRotation: 0,
+                autoSkip: false
+              },
               grid: { color: 'rgba(255,255,255,0.1)' }
             }
           }
