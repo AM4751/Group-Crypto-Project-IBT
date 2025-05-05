@@ -7,7 +7,6 @@ fetch('/.netlify/functions/getCryptoList')
     const container = document.getElementById('chart-container');
 
     top20.forEach((coin, index) => {
-      // Skip if any essential data is missing
       if (!coin.quote || !coin.quote.USD || !coin.circulating_supply || !coin.total_supply) return;
 
       const card = document.createElement('div');
@@ -18,34 +17,20 @@ fetch('/.netlify/functions/getCryptoList')
 
       const canvas1 = document.createElement('canvas');
       canvas1.id = `financial-${index}`;
-      canvas1.style.height = '250px';
-      canvas1.style.marginBottom = '1.5rem';
 
       const canvas2 = document.createElement('canvas');
       canvas2.id = `supply-${index}`;
-      canvas2.style.height = '220px';
-      canvas2.style.marginTop = '0.5rem';
 
       card.appendChild(title);
       card.appendChild(canvas1);
       card.appendChild(canvas2);
       container.appendChild(card);
 
-      // Safe number wrapper
       const safe = val => {
         if (typeof val !== 'number' || !isFinite(val) || val <= 0) return 0.01;
         if (val > 1e12) return 1e12;
         return val;
       };
-
-      // Debug log
-      console.log(`${coin.name}:`, {
-        price: coin.quote.USD.price,
-        cap: coin.quote.USD.market_cap,
-        volume: coin.quote.USD.volume_24h,
-        circ: coin.circulating_supply,
-        total: coin.total_supply
-      });
 
       const financialCtx = canvas1.getContext('2d');
       new Chart(financialCtx, {
@@ -68,7 +53,8 @@ fetch('/.netlify/functions/getCryptoList')
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
+          maintainAspectRatio: true,
+          aspectRatio: 2,
           layout: { padding: { top: 10, bottom: 20 } },
           plugins: {
             legend: { display: false },
@@ -132,7 +118,8 @@ fetch('/.netlify/functions/getCryptoList')
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
+          maintainAspectRatio: true,
+          aspectRatio: 2,
           layout: { padding: { top: 10, bottom: 20 } },
           plugins: {
             legend: { display: false },
