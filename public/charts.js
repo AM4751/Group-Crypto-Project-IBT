@@ -55,6 +55,10 @@ fetch('/.netlify/functions/getCryptoList')
           responsive: true,
           maintainAspectRatio: true,
           aspectRatio: 2,
+          animation: {
+            duration: 800,
+            easing: 'easeOutQuart'
+          },
           layout: { padding: { top: 10, bottom: 20 } },
           plugins: {
             legend: { display: false },
@@ -76,8 +80,11 @@ fetch('/.netlify/functions/getCryptoList')
               ticks: {
                 color: '#fff',
                 font: { size: 11 },
+                maxTicksLimit: 4,
+                precision: 0,
                 callback: val => {
                   if (val === 0.01) return '';
+                  if (val >= 1e12) return `$${(val / 1e12).toFixed(1)}T`;
                   if (val >= 1e9) return `$${(val / 1e9).toFixed(1)}B`;
                   if (val >= 1e6) return `$${(val / 1e6).toFixed(1)}M`;
                   return `$${val}`;
@@ -99,16 +106,18 @@ fetch('/.netlify/functions/getCryptoList')
         }
       });
 
+      // Adjust for overlap if values are equal
+      const circ = safe(coin.circulating_supply);
+      const total = safe(coin.total_supply);
+      const adjustedSupply = circ === total ? [circ, total * 1.01] : [circ, total];
+
       const supplyCtx = canvas2.getContext('2d');
       new Chart(supplyCtx, {
         type: 'bar',
         data: {
           labels: ['Circ. Supply', 'Total Supply'],
           datasets: [{
-            data: [
-              safe(coin.circulating_supply),
-              safe(coin.total_supply)
-            ],
+            data: adjustedSupply,
             backgroundColor: [
               'rgba(255, 206, 86, 0.6)',
               'rgba(75, 192, 192, 0.6)'
@@ -120,6 +129,10 @@ fetch('/.netlify/functions/getCryptoList')
           responsive: true,
           maintainAspectRatio: true,
           aspectRatio: 2,
+          animation: {
+            duration: 800,
+            easing: 'easeOutQuart'
+          },
           layout: { padding: { top: 10, bottom: 20 } },
           plugins: {
             legend: { display: false },
@@ -141,8 +154,11 @@ fetch('/.netlify/functions/getCryptoList')
               ticks: {
                 color: '#fff',
                 font: { size: 11 },
+                maxTicksLimit: 4,
+                precision: 0,
                 callback: val => {
                   if (val === 0.01) return '';
+                  if (val >= 1e12) return `${(val / 1e12).toFixed(1)}T`;
                   if (val >= 1e9) return `${(val / 1e9).toFixed(1)}B`;
                   if (val >= 1e6) return `${(val / 1e6).toFixed(1)}M`;
                   return `${val}`;
